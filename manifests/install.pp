@@ -7,14 +7,13 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::install {
   $user_home = "/home/${user}"
 
   exec { 'set-nic-dhcp':
-    command   => 'sudo dhclient ens3',
-    notify    => Exec['set-sed'],
-    logoutput => true,
+    command => 'sudo dhclient ens3',
+    notify  => Exec['set-sed'],
   }
   exec { 'set-sed':
-    command   => "sudo sed -i 's/172.33.0.51/172.22.0.51/g' /etc/systemd/system/docker.service.d/* /etc/environment /etc/apt/apt.conf /etc/security/pam_env.conf",
-    notify    => User["${user}"],
-    logoutput => true,
+    command => "sudo sed -i 's/172.33.0.51/172.22.0.51/g' /etc/systemd/system/docker.service.d/* /etc/environment /etc/apt/apt.conf /etc/security/pam_env.conf",
+    require => Exec['set-nic-dhcp'],
+    notify  => User["${user}"],
   }
 
   # Create user(s) - User creation not really needed for this vulnerability.
@@ -25,7 +24,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::install {
     home       => "${user_home}/",
     managehome => true,
     require    => Exec['set-sed'],
-    notify     => Package[''],
+    notify     => Package['build-essential'],
   }
 
   # Install dependancies

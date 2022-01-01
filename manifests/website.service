@@ -2,11 +2,9 @@
 Description=BusyBox httpd Server
 
 [Service]
+Type=simple
+user=root
 ExecStart=/usr/bin/WebServer.sh
 
 [Install]
 WantedBy=multi-user.target
-
-# sudo systemctl daemon-reload
-# sudo systemctl enable shellscript.service 
-# sudo systemctl start shellscript.service 
