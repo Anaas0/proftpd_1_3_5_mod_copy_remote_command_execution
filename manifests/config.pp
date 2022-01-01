@@ -5,11 +5,19 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::config {
   # SecGen Parameters
   #$secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
 
+  # Create /var/www/
+  file { '/var/www/':
+    ensure  => 'directory',
+    mode    => '0777',
+    require => Exec['restart-networking'],
+    notify  => File['/var/www/html/'],
+  }
+
   # Create /var/www/html/
   file { '/var/www/html/':
     ensure  => 'directory',
     mode    => '0777',
-    require => Exec['restart-networking'],
+    require => Exec['/var/www/'],
     notify  => File['/var/www/html/index.html'],
   }
 
