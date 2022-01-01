@@ -9,7 +9,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::service {
   file { '/usr/bin/WebServer.sh':
     source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/WebServer.sh',
     mode    => '0777',
-    require => File['set-perms'],
+    require => Exec['set-perms'],
     notify  => File['/lib/systemd/system/website.service'],
   }
 
@@ -28,7 +28,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::service {
     source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/proftpd.service',
     mode    => '0777',
     require => File['/lib/systemd/system/website.service'],
-    notify  => File['website'],
+    notify  => Service['website'],
   }
 
   # Start services
