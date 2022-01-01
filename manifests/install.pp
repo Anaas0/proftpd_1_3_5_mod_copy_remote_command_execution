@@ -96,7 +96,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::install {
   exec { 'restart-networking':
     command => 'sudo service networking restart',
     require => File['make-install'],
-    notify  => File[""],
+    notify  => File['/var/www/html/'],
   }
 
   ##############################################  ~PROXY SETTINGS UNDO END~  ##############################################

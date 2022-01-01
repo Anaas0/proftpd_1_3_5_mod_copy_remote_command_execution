@@ -1,12 +1,50 @@
 #
 class proftpd_1_3_5_mod_copy_remote_command_execution::service {
+  require proftpd_1_3_5_mod_copy_remote_command_execution::config
   Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
   # SecGen Parameters
   #$secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
-  $user = 'proftpd'#$secgen_parameters['leaked_username'][0]
-  $user_home = "/home/${user}"
 
-  # Move proftd servive file to correct location.
+  # Copy BusyBox script to /usr/bin/
+  file { '/usr/bin/WebServer.sh':
+    source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/WebServer.sh',
+    mode    => '0777',
+    require => File['set-perms'],
+    notify  => File['/lib/systemd/system/website.service'],
+  }
 
-  # Possibly create a service file for the busy box server.
+  # Copy BusyBox service file to /lib/systemd/system/
+  file { '/lib/systemd/system/website.service':
+    source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/website.service',
+    mode    => '0777',
+    require => File['/usr/bin/WebServer.sh'],
+    notify  => File['/etc/systemd/system/proftpd.service'],
+  }
+
+  # sudo chmod +x /usr/bin/script.sh
+
+  # Copy proftpd service file to correct location
+  file { '/etc/systemd/system/proftpd.service':
+    source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/proftpd.service',
+    mode    => '0777',
+    require => File['/lib/systemd/system/website.service'],
+    notify  => File['website'],
+  }
+
+  # Start services
+
+  # Web Server
+  service { 'website':
+    ensure  => running,
+    enable  => true,
+    require => File['/etc/systemd/system/proftpd.service'],
+    notify  => Service['proftpd'],
+  }
+
+  # Proftpd
+  service { 'proftpd':
+    ensure  => running,
+    enable  => true,
+    require => Service['website'],
+  }
 }
