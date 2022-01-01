@@ -17,7 +17,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::config {
   file { '/var/www/html/':
     ensure  => 'directory',
     mode    => '0777',
-    require => Exec['/var/www/'],
+    require => File['/var/www/'],
     notify  => File['/var/www/html/index.html'],
   }
 

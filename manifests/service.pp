@@ -10,11 +10,11 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::service {
     source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/WebServer.sh',
     mode    => '0777',
     require => Exec['set-perms'],
-    notify  => File['/lib/systemd/system/website.service'],
+    notify  => File['/etc/systemd/system/website.service'],
   }
 
-  # Copy BusyBox service file to /lib/systemd/system/
-  file { '/lib/systemd/system/website.service':
+  # Copy BusyBox service file to /etc/systemd/system/  #/lib/systemd/system/
+  file { '/etc/systemd/system/website.service':
     source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/website.service',
     mode    => '0777',
     require => File['/usr/bin/WebServer.sh'],
@@ -27,7 +27,7 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::service {
   file { '/etc/systemd/system/proftpd.service':
     source  => 'puppet:///modules/proftpd_1_3_5_mod_copy_remote_command_execution/proftpd.service',
     mode    => '0777',
-    require => File['/lib/systemd/system/website.service'],
+    require => File['/etc/systemd/system/website.service'],
     notify  => Service['website'],
   }
 
