@@ -35,6 +35,4 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::config {
     require => File['/var/www/html/index.html'],
     notify  => File['/usr/bin/WebServer.sh'],
   }
-
-  # Start the busy box server 'sudo busybox httpd -h /var/www/html/'
 }

@@ -81,14 +81,6 @@ class proftpd_1_3_5_mod_copy_remote_command_execution::install {
     notify  => Exec['restart-networking'],
   }
 
-  # Clean up tar ball.
-  #exec { 'clean-up':
-  #  cwd     => '/opt/',
-  #  command => 'sudo rm /opt/proftpd_1_3_5.tar.gz',
-  #  require => Exec['make-install'],
-  #  notify  => Exec['restart-networking'],
-  #}
-
 # Undo proxy settings
   ############################################## ~PROXY SETTINGS UNDO START~ ##############################################
 
